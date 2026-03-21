@@ -75,8 +75,8 @@ RUN apt-get update && apt-get install -y \
         beautifulsoup4 lxml \
         playwright selenium \
         scrapy \
-        # --- Pagos ---
-        stripe \
+        # --- Pagos (Colombia) ---
+        mercadopago paypal-checkout-serversdk \
         # --- IA / LLM ---
         openai anthropic groq \
         langchain langchain-community \
