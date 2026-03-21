@@ -19,8 +19,10 @@ services:
     ports:
       - "${PORT:-3000}:3000"
     environment:
-      PORT: "3000"
-      OPENCODE_WORKSPACE: /workspace
+      # ---- SUPABASE CONFIG ----
+      DATABASE_URL: ${DATABASE_URL:-}
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
 
       # ---- GRATUITOS (solo registro) ----
       # Groq: https://console.groq.com/keys

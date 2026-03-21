@@ -122,46 +122,29 @@ RUN curl -fsSL https://deno.land/install.sh | sh \
     && cp /root/.deno/bin/deno /usr/local/bin/deno
 
 # ============================================================
-# OPENCODE (binario oficial de SST)
+# OPENCODE EVOLUTION - Configuración Final
 # ============================================================
-ARG OPENCODE_VERSION=1.2.27
-RUN curl -fsSL "https://github.com/sst/opencode/releases/download/v${OPENCODE_VERSION}/opencode-linux-x64.tar.gz" \
-    -o /tmp/opencode.tar.gz \
-    && tar -xzf /tmp/opencode.tar.gz -C /tmp \
-    && mv /tmp/opencode /usr/local/bin/opencode \
-    && chmod +x /usr/local/bin/opencode \
-    && rm /tmp/opencode.tar.gz
+WORKDIR /app
 
-# ============================================================
-# CONFIGURACIÓN DEL WORKSPACE
-# ============================================================
-WORKDIR /workspace
+# Copiar todo el workspace
+COPY . .
 
-# Copiar configuración de OpenCode
-COPY .config/opencode/ /root/.config/opencode/
-COPY .opencode/ /workspace/.opencode/
-COPY .env.example /workspace/.env.example
-COPY proyectos/README.md /workspace/proyectos/README.md
+# Instalar dependencias con PNPM
+RUN npm install -g pnpm && pnpm install --no-frozen-lockfile
 
-# Crear estructura de directorios
-RUN mkdir -p \
-    /workspace/proyectos \
-    /root/.local/share/opencode \
-    /root/.cache/opencode \
-    /root/.config/opencode
+# Construir la base de datos (schema)
+RUN pnpm --filter @workspace/db run push || true
 
-# Copiar script de inicio
-COPY docker/start.sh /usr/local/bin/start-opencode.sh
-RUN chmod +x /usr/local/bin/start-opencode.sh
+# Construir el servidor API
+RUN pnpm --filter @workspace/api-server run build
 
-# Puerto de OpenCode
+# NOTA: En Docker (Linux), el UI se puede construir sin problemas de Rollup
+RUN pnpm --filter @workspace/opencode-ui run build
+
+# Configuración del Entorno de Ejecución
 EXPOSE 3000
-
-# Variables de entorno por defecto
 ENV PORT=3000
-ENV OPENCODE_WORKSPACE=/workspace
+ENV NODE_ENV=production
 
-# Volúmenes para persistencia
-VOLUME ["/workspace", "/root/.local/share/opencode"]
-
-CMD ["/usr/local/bin/start-opencode.sh"]
+# Comando para iniciar el servidor evolucionado
+CMD ["pnpm", "--filter", "@workspace/api-server", "run", "start"]

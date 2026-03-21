@@ -1,0 +1,170 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-6",
+  "small_model": "openai/gpt-5-mini",
+  "instructions": [
+    ".opencode/memory.md"
+  ],
+  "autoupdate": false,
+  "snapshot": true,
+  "permission": "allow",
+  "provider": {
+    "groq": {
+      "name": "Groq (Gratis)",
+      "npm": "@ai-sdk/groq",
+      "env": ["GROQ_API_KEY"],
+      "models": {
+        "llama-3.3-70b-versatile": {
+          "name": "Llama 3.3 70B (Gratis)",
+          "id": "llama-3.3-70b-versatile",
+          "attachment": false
+        },
+        "llama-3.1-8b-instant": {
+          "name": "Llama 3.1 8B Instant (Gratis)",
+          "id": "llama-3.1-8b-instant",
+          "attachment": false
+        },
+        "gemma2-9b-it": {
+          "name": "Gemma 2 9B (Gratis)",
+          "id": "gemma2-9b-it",
+          "attachment": false
+        },
+        "mixtral-8x7b-32768": {
+          "name": "Mixtral 8x7B (Gratis)",
+          "id": "mixtral-8x7b-32768",
+          "attachment": false
+        },
+        "deepseek-r1-distill-llama-70b": {
+          "name": "DeepSeek R1 70B (Gratis)",
+          "id": "deepseek-r1-distill-llama-70b",
+          "attachment": false
+        },
+        "qwen-qwq-32b": {
+          "name": "Qwen QwQ 32B (Gratis)",
+          "id": "qwen-qwq-32b",
+          "attachment": false
+        }
+      }
+    },
+    "openrouter": {
+      "name": "OpenRouter (Gratuitos + Premium)",
+      "npm": "@openrouter/ai-sdk-provider",
+      "env": ["OPENROUTER_API_KEY"],
+      "models": {
+        "qwen/qwen3-coder:free": {
+          "name": "Qwen3 Coder 480B [GRATIS]",
+          "id": "qwen/qwen3-coder:free",
+          "attachment": false
+        },
+        "openai/gpt-oss-120b:free": {
+          "name": "OpenAI GPT-OSS 120B [GRATIS]",
+          "id": "openai/gpt-oss-120b:free",
+          "attachment": false
+        },
+        "openai/gpt-oss-20b:free": {
+          "name": "OpenAI GPT-OSS 20B [GRATIS]",
+          "id": "openai/gpt-oss-20b:free",
+          "attachment": false
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "name": "NVIDIA Nemotron 3 120B [GRATIS]",
+          "id": "nvidia/nemotron-3-super-120b-a12b:free",
+          "attachment": false
+        },
+        "google/gemma-3n-e4b-it:free": {
+          "name": "Google Gemma 3n 4B [GRATIS]",
+          "id": "google/gemma-3n-e4b-it:free",
+          "attachment": false
+        },
+        "qwen/qwen3-4b:free": {
+          "name": "Qwen3 4B [GRATIS]",
+          "id": "qwen/qwen3-4b:free",
+          "attachment": false
+        },
+        "minimax/minimax-m2.5:free": {
+          "name": "MiniMax M2.5 [GRATIS]",
+          "id": "minimax/minimax-m2.5:free",
+          "attachment": false
+        },
+        "anthropic/claude-sonnet-4-5": {
+          "name": "Claude Sonnet 4.5 via OpenRouter",
+          "id": "anthropic/claude-sonnet-4-5",
+          "attachment": true
+        },
+        "deepseek/deepseek-r1": {
+          "name": "DeepSeek R1 via OpenRouter",
+          "id": "deepseek/deepseek-r1",
+          "attachment": false
+        }
+      }
+    },
+    "togetherai": {
+      "name": "Together AI",
+      "npm": "@ai-sdk/togetherai",
+      "env": ["TOGETHER_AI_API_KEY"],
+      "models": {
+        "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free": {
+          "name": "Llama 3.3 70B Turbo [GRATIS]",
+          "id": "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
+          "attachment": false
+        },
+        "deepseek-ai/DeepSeek-V3": {
+          "name": "DeepSeek V3",
+          "id": "deepseek-ai/DeepSeek-V3",
+          "attachment": false
+        }
+      }
+    },
+    "cerebras": {
+      "name": "Cerebras (Gratis, muy rápido)",
+      "npm": "@ai-sdk/cerebras",
+      "env": ["CEREBRAS_API_KEY"],
+      "models": {
+        "llama3.3-70b": {
+          "name": "Llama 3.3 70B - Cerebras [GRATIS]",
+          "id": "llama3.3-70b",
+          "attachment": false
+        },
+        "qwen-3-32b": {
+          "name": "Qwen3 32B - Cerebras [GRATIS]",
+          "id": "qwen-3-32b",
+          "attachment": false
+        }
+      }
+    },
+    "mistral": {
+      "name": "Mistral AI",
+      "npm": "@ai-sdk/mistral",
+      "env": ["MISTRAL_API_KEY"],
+      "models": {
+        "mistral-small-latest": {
+          "name": "Mistral Small",
+          "id": "mistral-small-latest",
+          "attachment": false
+        },
+        "mistral-large-latest": {
+          "name": "Mistral Large",
+          "id": "mistral-large-latest",
+          "attachment": false
+        }
+      }
+    },
+    "xai": {
+      "name": "xAI Grok",
+      "npm": "@ai-sdk/xai",
+      "env": ["XAI_API_KEY"],
+      "models": {
+        "grok-3": {
+          "name": "Grok 3",
+          "id": "grok-3",
+          "attachment": false
+        },
+        "grok-3-mini": {
+          "name": "Grok 3 Mini",
+          "id": "grok-3-mini",
+          "attachment": false
+        }
+      }
+    }
+  }
+}

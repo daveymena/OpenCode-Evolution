@@ -1,0 +1,25 @@
+{
+  "system": {
+    "name": "OpenCode OS Evolution",
+    "version": "2.0.0",
+    "language": "es",
+    "theme": "premium-dark",
+    "autonomous_mode": true
+  },
+  "features": {
+    "integrated_preview": true,
+    "multi_language_support": true,
+    "database_memory": true,
+    "server_ready": true
+  },
+  "paths": {
+    "projects": "./proyectos",
+    "database": "./data/opencode.db",
+    "workspace": "./"
+  },
+  "ai": {
+    "default_model": "claude-sonnet-4-6",
+    "memory_retention": "high",
+    "context_aware": true
+  }
+}

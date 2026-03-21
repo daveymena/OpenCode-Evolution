@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useGetMessages } from '@workspace/api-client-react/src/generated/api';
+import { useGetMessages } from '@workspace/api-client-react';
 import { useChatStream } from '@/hooks/use-chat-stream';
 import { Send, Bot, User, StopCircle, Sparkles, TerminalSquare } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';

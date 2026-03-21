@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Outfit', 'Inter', sans-serif;
   --font-mono: 'Fira Code', monospace;
 
   --color-background: hsl(var(--background));
@@ -27,77 +27,86 @@
 }
 
 :root {
-  --background: 0 0% 4%;
+  --background: 240 10% 3.9%;
   --foreground: 0 0% 98%;
-  --card: 0 0% 7%;
+  --card: 240 10% 5%;
   --card-foreground: 0 0% 98%;
-  --popover: 0 0% 7%;
+  --popover: 240 10% 3.9%;
   --popover-foreground: 0 0% 98%;
   
-  --primary: 191 97% 41%; /* Cyan-400 */
-  --primary-foreground: 0 0% 100%;
+  --primary: 263 70% 50.4%; /* Purple-600 */
+  --primary-foreground: 210 40% 98%;
   
-  --secondary: 240 4% 16%;
+  --secondary: 240 3.7% 15.9%;
   --secondary-foreground: 0 0% 98%;
   
-  --muted: 240 5% 16%;
-  --muted-foreground: 240 5% 65%;
+  --muted: 240 3.7% 15.1%;
+  --muted-foreground: 240 5% 64.9%;
   
-  --accent: 240 4% 16%;
+  --accent: 263 70% 50.4%;
   --accent-foreground: 0 0% 98%;
   
-  --destructive: 0 84% 60%;
+  --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
   
-  --border: 240 6% 15%;
-  --input: 240 6% 15%;
-  --ring: 191 97% 41%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 263 70% 50.4%;
 
-  --radius: 0.5rem;
+  --radius: 1rem;
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border/40;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased overflow-hidden selection:bg-primary/30 selection:text-white;
   }
 }
 
-/* Custom Scrollbar for terminal & editor vibe */
+.glass-effect {
+  background: rgba(15, 15, 20, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.premium-gradient {
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, #3b82f6 50%, #10b981 100%);
+}
+
+.animation-slide-in {
+  animation: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted));
-  border-radius: 5px;
-  border: 2px solid hsl(var(--background));
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground));
-}
-
-/* Markdown prose styles for chat */
-.prose pre {
-  @apply bg-[#1e1e1e] border border-border p-4 rounded-lg my-4 overflow-x-auto font-mono text-sm;
-}
-.prose code {
-  @apply bg-[#1e1e1e] text-[#e5e5e5] px-1.5 py-0.5 rounded text-sm font-mono border border-border/50;
-}
-.prose pre code {
-  @apply bg-transparent border-0 p-0 text-inherit;
-}
-.prose p {
-  @apply leading-relaxed mb-4 last:mb-0;
-}
-.prose ul {
-  @apply list-disc list-inside mb-4 pl-4;
-}
-.prose ol {
-  @apply list-decimal list-inside mb-4 pl-4;
+  background: rgba(255, 255, 255, 0.2);
 }

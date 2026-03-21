@@ -5,7 +5,7 @@ import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { css } from '@codemirror/lang-css';
 import { python } from '@codemirror/lang-python';
-import { useReadFile, useWriteFile } from '@workspace/api-client-react/src/generated/api';
+import { useReadFile, useWriteFile } from '@workspace/api-client-react';
 import { Save, AlertCircle } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';

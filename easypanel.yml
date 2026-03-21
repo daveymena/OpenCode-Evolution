@@ -14,10 +14,10 @@ services:
       - host: "$(PRIMARY_DOMAIN)"
         port: 3000
         https: true
-    env:
-      # Puerto
-      PORT: "3000"
-      OPENCODE_WORKSPACE: /workspace
+      # ---- SUPABASE CLOUD (Evolución) ----
+      DATABASE_URL: "postgresql://postgres:OpenCode_Evo_2026!@db.rzkmwvvezpijejiasowe.supabase.co:5432/postgres"
+      SUPABASE_URL: "https://rzkmwvvezpijejiasowe.supabase.co"
+      SUPABASE_SERVICE_ROLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdWJhc2UiLCJyZWYiOiJyemttd3Z2ZXpwaWplamlhc293ZSIsInJvbGUiOiJzZXJ2aWNlX3JvbGUiLCJpYXQiOjE3NDI1ODMxMTIsImV4cCI6MjA1ODE1OTExMn0.S_i_l0v1eGsYcTVMfUqMA_YquSsw5F"
 
       # ---- GRATUITOS (solo registro) ----
       # Groq → https://console.groq.com/keys

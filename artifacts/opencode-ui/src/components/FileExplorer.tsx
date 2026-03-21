@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronRight, ChevronDown, FileCode, Folder, FolderOpen, RefreshCcw } from 'lucide-react';
-import { useListFiles, getListFilesQueryKey } from '@workspace/api-client-react/src/generated/api';
-import type { FileNode } from '@workspace/api-client-react/src/generated/api.schemas';
+import { useListFiles, getListFilesQueryKey } from '@workspace/api-client-react';
+import type { FileNode } from '@workspace/api-client-react.schemas';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { useQueryClient } from '@tanstack/react-query';

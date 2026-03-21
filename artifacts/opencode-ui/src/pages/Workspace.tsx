@@ -1,17 +1,33 @@
 import { useState, useEffect } from 'react';
-import { useListModels, useListSessions, useCreateSession } from '@workspace/api-client-react/src/generated/api';
+import { 
+  useListModels, 
+  useListSessions, 
+  useCreateSession,
+  getListSessionsQueryKey,
+  useListFiles, 
+  useCreateFile, 
+  useDeleteFile, 
+  useGetFileContent, 
+  useUpdateFileContent 
+} from "@workspace/api-client-react";
 import { FileExplorer } from '@/components/FileExplorer';
 import { CodeEditorPanel } from '@/components/CodeEditor';
 import { TerminalPanel } from '@/components/Terminal';
 import { ChatPanel } from '@/components/ChatPanel';
-import { Terminal, Plus, LayoutGrid } from 'lucide-react';
+import { Dashboard } from '@/components/Dashboard';
+import { PreviewPanel } from '@/components/PreviewPanel';
+import { Terminal, Plus, LayoutGrid, Monitor, Code2, Rocket, Settings, Cpu } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { getListSessionsQueryKey } from '@workspace/api-client-react/src/generated/api';
+import { motion, AnimatePresence } from 'framer-motion';
+
+type ViewMode = 'dashboard' | 'editor' | 'preview';
 
 export function Workspace() {
+  const [viewMode, setViewMode] = useState<ViewMode>('dashboard');
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>('claude-sonnet-4-6');
   const [activeFilePath, setActiveFilePath] = useState<string | null>(null);
+  const [activeProjectPath, setActiveProjectPath] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const queryClient = useQueryClient();
@@ -20,115 +36,160 @@ export function Workspace() {
   const { data: sessionsData, isLoading: sessionsLoading } = useListSessions();
   const { mutateAsync: createSession, isPending: isCreatingSession } = useCreateSession();
 
-  // Auto-select first session if none selected and sessions exist
+  // Escanear proyectos al cargar
   useEffect(() => {
-    if (!activeSessionId && sessionsData?.sessions?.length && sessionsData.sessions.length > 0) {
-      setActiveSessionId(sessionsData.sessions[0].id);
-      setSelectedModel(sessionsData.sessions[0].model || 'claude-sonnet-4-6');
-    }
-  }, [sessionsData, activeSessionId]);
+     // Aquí se llamaría a la API de sincronización si estuviera disponible en el cliente generado
+  }, []);
+
+  const handleLaunchProject = (path: string) => {
+    setActiveProjectPath(path);
+    setViewMode('editor');
+  };
 
   const handleCreateSession = async () => {
     try {
       const newSession = await createSession({
         data: {
-          title: `Session ${new Date().toLocaleTimeString()}`,
+          title: `Sesión ${new Date().toLocaleTimeString('es-ES')}`,
           model: selectedModel
         }
       });
       setActiveSessionId(newSession.id);
       queryClient.invalidateQueries({ queryKey: getListSessionsQueryKey() });
     } catch (err) {
-      console.error("Failed to create session", err);
+      console.error("Error al crear sesión", err);
     }
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-background overflow-hidden selection:bg-primary/30">
+    <div className="flex flex-col h-screen w-full bg-background overflow-hidden selection:bg-primary/30 font-sans">
       
-      {/* Top Navbar */}
-      <nav className="h-12 border-b border-border bg-card flex items-center justify-between px-4 shrink-0 shadow-sm z-10">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 font-bold text-primary">
-            <Terminal className="w-5 h-5" />
-            <span className="tracking-tight text-lg hidden sm:inline-block">OpenCode</span>
+      {/* Navbar Superior Premium */}
+      <nav className="h-14 border-b border-border/50 bg-card/30 backdrop-blur-xl flex items-center justify-between px-6 shrink-0 z-30 shadow-2xl relative">
+        <div className="flex items-center gap-6">
+          <div 
+            className="flex items-center gap-2.5 font-black text-white cursor-pointer group"
+            onClick={() => setViewMode('dashboard')}
+          >
+            <div className="p-1.5 premium-gradient rounded-lg shadow-lg group-hover:scale-110 transition-transform">
+              <Cpu className="w-5 h-5" />
+            </div>
+            <span className="tracking-tighter text-xl outfit">OpenCode <span className="text-primary tracking-widest text-[10px] bg-primary/10 px-1.5 py-0.5 rounded ml-1 border border-primary/20">OS</span></span>
           </div>
           
-          <button 
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-1.5 text-muted-foreground hover:bg-muted rounded-md transition-colors sm:hidden"
-          >
-            <LayoutGrid className="w-4 h-4" />
-          </button>
+          <div className="h-6 w-px bg-border/50 hidden md:block" />
+
+          {/* Selectores de Modo */}
+          <div className="flex bg-muted/40 p-1 rounded-xl border border-border/40 scale-90 md:scale-100">
+            <button 
+              onClick={() => setViewMode('dashboard')}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'dashboard' ? 'bg-primary text-white shadow-lg' : 'text-muted-foreground hover:bg-white/5'}`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>TABLERO</span>
+            </button>
+            <button 
+              onClick={() => setViewMode('editor')}
+              disabled={!activeProjectPath}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'editor' ? 'bg-primary text-white shadow-lg' : 'text-muted-foreground hover:bg-white/5'} ${!activeProjectPath ? 'opacity-40 cursor-not-allowed' : ''}`}
+            >
+              <Code2 className="w-3.5 h-3.5" />
+              <span>CÓDIGO</span>
+            </button>
+            <button 
+              onClick={() => setViewMode('preview')}
+              disabled={!activeProjectPath}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'preview' ? 'bg-primary text-white shadow-lg' : 'text-muted-foreground hover:bg-white/5'} ${!activeProjectPath ? 'opacity-40 cursor-not-allowed' : ''}`}
+            >
+              <Monitor className="w-3.5 h-3.5" />
+              <span>VISTA PREVIA</span>
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Model Selector */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground hidden md:inline-block font-mono">MODEL:</span>
+          {/* Selector de Modelos */}
+          <div className="flex items-center gap-3 bg-card/50 border border-border/40 px-3 py-1.5 rounded-xl shadow-inner">
+            <Rocket className="w-3.5 h-3.5 text-primary" />
             <select 
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className="bg-background border border-border rounded-md px-2 py-1 text-xs font-mono focus:ring-1 focus:ring-primary outline-none text-foreground w-[160px]"
+              className="bg-transparent border-none py-0 text-xs font-bold focus:ring-0 outline-none text-foreground w-[160px] cursor-pointer"
             >
               {modelsData?.models?.map(m => (
                 <option key={m.id} value={m.id}>{m.name}</option>
               ))}
-              {!modelsData?.models?.length && <option value="claude-sonnet-4-6">claude-sonnet-4-6</option>}
+              {!modelsData?.models?.length && <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>}
             </select>
           </div>
 
-          {/* Session Selector */}
-          <div className="flex items-center gap-2 border-l border-border pl-4">
-            <select
-              value={activeSessionId || ''}
-              onChange={(e) => setActiveSessionId(e.target.value)}
-              className="bg-background border border-border rounded-md px-2 py-1 text-xs focus:ring-1 focus:ring-primary outline-none text-foreground max-w-[150px]"
-              disabled={sessionsLoading}
-            >
-              <option value="" disabled>Select Session</option>
-              {sessionsData?.sessions?.map(s => (
-                <option key={s.id} value={s.id}>{s.title}</option>
-              ))}
-            </select>
-            
-            <button 
-              onClick={handleCreateSession}
-              disabled={isCreatingSession}
-              className="p-1.5 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground rounded-md transition-all border border-primary/20"
-              title="New Session"
-            >
-              {isCreatingSession ? <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
-            </button>
-          </div>
+          <button className="p-2 text-muted-foreground hover:text-foreground transition-colors hover:rotate-45" title="Configuración">
+            <Settings className="w-5 h-5" />
+          </button>
         </div>
       </nav>
 
-      {/* Main Workspace Area */}
-      <div className="flex-1 flex overflow-hidden">
-        
-        {/* Left Sidebar - File Explorer */}
-        <div className={`w-64 shrink-0 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-ml-64 absolute h-full z-20'}`}>
-          <FileExplorer 
-            onFileSelect={(path) => {
-              setActiveFilePath(path);
-              if (window.innerWidth < 640) setIsSidebarOpen(false); // auto-close on mobile
-            }}
-            activeFile={activeFilePath}
-          />
-        </div>
+      {/* Área Principal con Transiciones */}
+      <div className="flex-1 flex overflow-hidden relative">
+        <AnimatePresence mode="wait">
+          {viewMode === 'dashboard' ? (
+            <motion.div 
+              key="dashboard"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.02 }}
+              className="w-full h-full flex flex-col"
+            >
+              <Dashboard 
+                onProjectSelect={handleLaunchProject} 
+                projects={[]} // Aquí se pasarían los proyectos reales de la API
+              />
+            </motion.div>
+          ) : viewMode === 'preview' ? (
+            <motion.div 
+              key="preview"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="w-full h-full p-6 bg-[#0a0a0c]"
+            >
+               <PreviewPanel url="http://localhost:3000" onClose={() => setViewMode('editor')} />
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="editor"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex-1 flex overflow-hidden w-full"
+            >
+              {/* Barra Lateral Izquierda - Explorador de Archivos */}
+              <div className={`w-72 shrink-0 glass-effect z-20 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-ml-72'}`}>
+                <FileExplorer 
+                  onFileSelect={(path) => {
+                    setActiveFilePath(path);
+                  }}
+                  activeFile={activeFilePath}
+                />
+              </div>
 
-        {/* Center Panel - Editor & Terminal */}
-        <div className="flex-1 flex flex-col min-w-0">
-          <CodeEditorPanel filePath={activeFilePath} />
-          <TerminalPanel className="h-[250px] shrink-0" />
-        </div>
+              {/* Panel Central - Editor y Terminal */}
+              <div className="flex-1 flex flex-col min-w-0 bg-[#0d0d0f]">
+                <div className="flex-1 relative">
+                  <CodeEditorPanel filePath={activeFilePath} />
+                </div>
+                <div className="h-[280px] shrink-0 border-t border-border/50 glass-effect">
+                  <TerminalPanel className="h-full" />
+                </div>
+              </div>
 
-        {/* Right Sidebar - Chat */}
-        <div className="w-80 lg:w-[400px] shrink-0 hidden md:block">
-          <ChatPanel sessionId={activeSessionId} selectedModel={selectedModel} />
-        </div>
-        
+              {/* Barra Lateral Derecha - Chat */}
+              <div className="w-96 lg:w-[450px] shrink-0 hidden md:block border-l border-border/50 glass-effect">
+                <ChatPanel sessionId={activeSessionId} selectedModel={selectedModel} />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

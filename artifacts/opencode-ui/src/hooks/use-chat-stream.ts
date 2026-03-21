@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
-import type { Message } from '@workspace/api-client-react/src/generated/api.schemas';
+import type { Message } from '@workspace/api-client-react.schemas';
 import { useQueryClient } from '@tanstack/react-query';
-import { getGetMessagesQueryKey } from '@workspace/api-client-react/src/generated/api';
+import { getGetMessagesQueryKey } from '@workspace/api-client-react';
 
 interface ChatStreamRequest {
   sessionId: string;
