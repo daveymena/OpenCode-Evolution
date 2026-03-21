@@ -5,6 +5,8 @@ import terminalRouter from "./terminal";
 import modelsRouter from "./models";
 import projectsRouter from "./projects";
 import integrationsRouter from "./integrations";
+import mcpRouter from "./mcp";
+import webhooksRouter from "./webhooks";
 
 const router: IRouter = Router();
 
@@ -14,5 +16,7 @@ router.use("/terminal", terminalRouter);
 router.use("/models", modelsRouter);
 router.use("/projects", projectsRouter);
 router.use("/integrations", integrationsRouter);
+router.use("/mcp", mcpRouter);
+router.use("/webhooks", webhooksRouter);
 
 export default router;

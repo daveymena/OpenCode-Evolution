@@ -49,9 +49,42 @@ RUN curl -fsSL https://bun.sh/install | bash \
 # ============================================================
 RUN apt-get update && apt-get install -y \
     python3.12 python3.12-dev python3.12-venv python3-pip \
+    libta-lib-dev \
     && update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1 \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1 \
-    && pip3 install --no-cache-dir --break-system-packages uv poetry \
+    && pip3 install --no-cache-dir --break-system-packages \
+        uv poetry \
+        # --- Trading & Finanzas ---
+        ccxt pandas numpy scipy \
+        backtrader \
+        python-binance pybit alpaca-trade-api \
+        yfinance alpha_vantage \
+        # --- Comunicación ---
+        python-telegram-bot \
+        twilio sendgrid \
+        # --- Google Ecosystem ---
+        google-api-python-client google-auth-httplib2 google-auth-oauthlib \
+        gspread pygsheets \
+        # --- E-commerce ---
+        woocommerce shopifyapi \
+        # --- Bases de Datos ---
+        psycopg2-binary redis motor pymongo \
+        sqlalchemy alembic \
+        # --- Automatización y Datos ---
+        requests httpx aiohttp \
+        python-dotenv schedule apscheduler \
+        beautifulsoup4 lxml \
+        playwright selenium \
+        scrapy \
+        # --- Pagos ---
+        stripe \
+        # --- IA / LLM ---
+        openai anthropic groq \
+        langchain langchain-community \
+        transformers torch --extra-index-url https://download.pytorch.org/whl/cpu \
+        # --- Utilidades Dev ---
+        black flake8 pytest fastapi uvicorn \
+        pydantic rich typer \
     && rm -rf /var/lib/apt/lists/*
 
 # ============================================================
@@ -90,6 +123,14 @@ ENV PATH="/opt/gradle/bin:${PATH}"
 # ============================================================
 # RUBY 3.3
 # ============================================================
+# ============================================================
+# PM2 - Process Manager para bots 24/7
+# ============================================================
+RUN npm install -g pm2
+
+# ============================================================
+# RUBY 3.3
+# ============================================================
 RUN apt-get update && apt-get install -y \
     ruby ruby-dev ruby-bundler \
     && gem install rails --no-document \
@@ -120,6 +161,23 @@ RUN curl -fsSL https://packages.microsoft.com/config/ubuntu/24.04/packages-micro
 # ============================================================
 RUN curl -fsSL https://deno.land/install.sh | sh \
     && cp /root/.deno/bin/deno /usr/local/bin/deno
+
+# ============================================================
+# HERRAMIENTAS NODE.JS GLOBALES (MCP & Automatización)
+# ============================================================
+RUN npm install -g \
+    # Bots & APIs
+    wrangler \
+    # Playwright para automatización web
+    @playwright/test \
+    # Monitoreo
+    clinic \
+    # Utilidades
+    nodemon tsx ts-node \
+    dotenv-cli
+
+# Instalar browsers de Playwright
+RUN playwright install chromium --with-deps 2>/dev/null || true
 
 # ============================================================
 # OPENCODE EVOLUTION - Configuración Final
