@@ -5,10 +5,22 @@
 El OpenCode original (v1.2.27 de SST) está instalado y corriendo como servicio en este proyecto.
 
 - **Binario**: `bin/opencode` (descargado del release oficial de GitHub)
-- **Script de inicio**: `bin/start-opencode.sh` (configura env vars de Anthropic)
+- **Script de inicio**: `bin/start-opencode.sh` (configura env vars de todos los proveedores)
 - **Puerto**: 21293 (accesible desde la preview `/`)
-- **Proveedor de IA**: Anthropic Claude (via Replit AI Integration — no requiere tu propia API key)
-- **Proyecto activo**: `~/workspace` (este mismo directorio)
+- **Config**: `.config/opencode/opencode.json`
+- **Memoria persistente**: `.opencode/memory.md` (cargado en cada sesión)
+- **Proyectos**: `proyectos/` (directorio para proyectos personales)
+
+### Proveedores configurados (sin API key propia)
+- **Anthropic Claude**: claude-sonnet-4-6, claude-opus-4-6, claude-haiku-4-5, y todos los anteriores
+- **OpenAI GPT**: gpt-5, gpt-5-mini, gpt-5-nano, gpt-4o, y más
+- **Google Gemini**: gemini-2.5-pro, gemini-2.5-flash, gemini-3-flash, y más
+- **Gratuitos**: opencode/big-pickle, opencode/gpt-5-nano, opencode/mimo-v2-omni-free, etc.
+
+### Env vars requeridas (configuradas por Replit AI Integration)
+- `AI_INTEGRATIONS_ANTHROPIC_API_KEY` + `AI_INTEGRATIONS_ANTHROPIC_BASE_URL`
+- `AI_INTEGRATIONS_OPENAI_API_KEY` + `AI_INTEGRATIONS_OPENAI_BASE_URL`
+- `AI_INTEGRATIONS_GEMINI_API_KEY` + `AI_INTEGRATIONS_GEMINI_BASE_URL`
 
 Para actualizar OpenCode: `bin/opencode upgrade`
 
