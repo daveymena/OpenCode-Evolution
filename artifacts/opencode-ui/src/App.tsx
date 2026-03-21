@@ -13,10 +13,13 @@ const queryClient = new QueryClient({
   },
 });
 
+import { Login } from "@/pages/Login";
+
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Workspace} />
+      <Route path="/login" component={Login} />
       <Route component={NotFound} />
     </Switch>
   );
