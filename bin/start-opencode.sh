@@ -1,24 +1,54 @@
 #!/bin/bash
-# Script de inicio de OpenCode con todos los proveedores de IA (via Replit AI Integrations)
+# ============================================================
+# OpenCode - Script de inicio completo
+# Soporta: Anthropic, OpenAI, Google, Groq, OpenRouter,
+#          Together AI, Mistral, xAI, Cerebras, Perplexity
+#          + Modelos locales via Ollama
+# ============================================================
 
-# --- Anthropic Claude ---
-export ANTHROPIC_API_KEY="$AI_INTEGRATIONS_ANTHROPIC_API_KEY"
-export ANTHROPIC_BASE_URL="$AI_INTEGRATIONS_ANTHROPIC_BASE_URL"
+# ---------- REPLIT (cuando corre en Replit) ----------
+if [ -n "$AI_INTEGRATIONS_ANTHROPIC_API_KEY" ]; then
+  export ANTHROPIC_API_KEY="$AI_INTEGRATIONS_ANTHROPIC_API_KEY"
+  export ANTHROPIC_BASE_URL="$AI_INTEGRATIONS_ANTHROPIC_BASE_URL"
+fi
+if [ -n "$AI_INTEGRATIONS_OPENAI_API_KEY" ]; then
+  export OPENAI_API_KEY="$AI_INTEGRATIONS_OPENAI_API_KEY"
+  export OPENAI_BASE_URL="$AI_INTEGRATIONS_OPENAI_BASE_URL"
+fi
+if [ -n "$AI_INTEGRATIONS_GEMINI_API_KEY" ]; then
+  export GOOGLE_GENERATIVE_AI_API_KEY="$AI_INTEGRATIONS_GEMINI_API_KEY"
+fi
 
-# --- OpenAI GPT ---
-export OPENAI_API_KEY="$AI_INTEGRATIONS_OPENAI_API_KEY"
-export OPENAI_BASE_URL="$AI_INTEGRATIONS_OPENAI_BASE_URL"
+# ---------- GRATUITOS (requieren solo registro gratis) ----------
+# Groq  → https://console.groq.com (gratuito, muy rápido)
+# GROQ_API_KEY ya debe estar en .env o env del sistema
 
-# --- Google Gemini ---
-export GOOGLE_GENERATIVE_AI_API_KEY="$AI_INTEGRATIONS_GEMINI_API_KEY"
+# OpenRouter → https://openrouter.ai (27+ modelos gratuitos con :free)
+# OPENROUTER_API_KEY ya debe estar en .env o env del sistema
 
-# --- Directorio de trabajo ---
-export OPENCODE_CWD="/home/runner/workspace"
+# Together AI → https://api.together.xyz (créditos gratis al registrarse)
+# TOGETHER_AI_API_KEY ya debe estar en .env o env del sistema
 
-# Crear directorio de proyectos si no existe
-mkdir -p /home/runner/workspace/proyectos
+# Cerebras → https://cloud.cerebras.ai (gratuito)
+# CEREBRAS_API_KEY ya debe estar en .env o env del sistema
 
-# Iniciar OpenCode
-exec /home/runner/workspace/bin/opencode serve \
-  --port "${PORT:-21293}" \
+# ---------- DE PAGO OPCIONALES ----------
+# MISTRAL_API_KEY, XAI_API_KEY, PERPLEXITY_API_KEY, COHERE_API_KEY
+
+# ---------- LOCAL (cuando Ollama está disponible) ----------
+if [ -n "$OLLAMA_HOST" ]; then
+  export OLLAMA_BASE_URL="${OLLAMA_HOST}"
+elif curl -s --connect-timeout 1 http://ollama:11434 >/dev/null 2>&1; then
+  export OLLAMA_BASE_URL="http://ollama:11434"
+elif curl -s --connect-timeout 1 http://localhost:11434 >/dev/null 2>&1; then
+  export OLLAMA_BASE_URL="http://localhost:11434"
+fi
+
+# ---------- Directorio de trabajo ----------
+WORKSPACE="${OPENCODE_WORKSPACE:-/workspace}"
+mkdir -p "$WORKSPACE/proyectos"
+
+# ---------- Iniciar OpenCode ----------
+exec /usr/local/bin/opencode serve \
+  --port "${PORT:-3000}" \
   --hostname 0.0.0.0
