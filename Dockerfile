@@ -138,6 +138,10 @@ RUN pnpm --filter @workspace/db run push || true
 # Construir el servidor API
 RUN pnpm --filter @workspace/api-server run build
 
+# Variables necesarias para el build de Vite
+ENV PORT=3000
+ENV BASE_PATH=/
+
 # NOTA: En Docker (Linux), el UI se puede construir sin problemas de Rollup
 RUN pnpm --filter @workspace/opencode-ui run build
 
