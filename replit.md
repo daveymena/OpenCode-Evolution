@@ -1,3 +1,19 @@
+# OpenCode en Replit
+
+## OpenCode (Herramienta Principal)
+
+El OpenCode original (v1.2.27 de SST) está instalado y corriendo como servicio en este proyecto.
+
+- **Binario**: `bin/opencode` (descargado del release oficial de GitHub)
+- **Script de inicio**: `bin/start-opencode.sh` (configura env vars de Anthropic)
+- **Puerto**: 21293 (accesible desde la preview `/`)
+- **Proveedor de IA**: Anthropic Claude (via Replit AI Integration — no requiere tu propia API key)
+- **Proyecto activo**: `~/workspace` (este mismo directorio)
+
+Para actualizar OpenCode: `bin/opencode upgrade`
+
+---
+
 # Workspace
 
 ## Overview
