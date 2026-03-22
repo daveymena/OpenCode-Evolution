@@ -14,22 +14,16 @@ services:
       - host: "$(PRIMARY_DOMAIN)"
         port: 3000
         https: true
+    env:
       # ---- SUPABASE CLOUD (Evolución) ----
       DATABASE_URL: "postgresql://postgres:OpenCode_Evo_2026!@db.rzkmwvvezpijejiasowe.supabase.co:5432/postgres"
       SUPABASE_URL: "https://rzkmwvvezpijejiasowe.supabase.co"
       SUPABASE_SERVICE_ROLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdWJhc2UiLCJyZWYiOiJyemttd3Z2ZXpwaWplamlhc293ZSIsInJvbGUiOiJzZXJ2aWNlX3JvbGUiLCJpYXQiOjE3NDI1ODMxMTIsImV4cCI6MjA1ODE1OTExMn0.S_i_l0v1eGsYcTVMfUqMA_YquSsw5F"
 
       # ---- GRATUITOS (solo registro) ----
-      # Groq → https://console.groq.com/keys
       GROQ_API_KEY: ""
-
-      # OpenRouter → https://openrouter.ai/keys
       OPENROUTER_API_KEY: ""
-
-      # Cerebras → https://cloud.cerebras.ai
       CEREBRAS_API_KEY: ""
-
-      # Together AI → https://api.together.xyz
       TOGETHER_AI_API_KEY: ""
 
       # ---- DE PAGO OPCIONALES ----

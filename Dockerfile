@@ -173,7 +173,8 @@ RUN npm install -g \
     clinic \
     # Utilidades
     nodemon tsx ts-node \
-    dotenv-cli
+    dotenv-cli \
+    opencode-ai
 
 # Instalar browsers de Playwright
 RUN playwright install chromium --with-deps 2>/dev/null || true
