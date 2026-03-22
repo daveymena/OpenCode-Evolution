@@ -130,7 +130,15 @@ export function Workspace() {
               {modelsData?.models?.map(m => (
                 <option key={m.id} value={m.id}>{m.name}</option>
               ))}
-              {!modelsData?.models?.length && <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>}
+              {!modelsData?.models?.length && (
+                <>
+                  <option value="groq-llama-3">Groq LLaMA 3 (Rápido)</option>
+                  <option value="claude-sonnet-3.5">Claude 3.5 Sonnet</option>
+                  <option value="gpt-4o">OpenAI GPT-4o</option>
+                  <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                  <option value="claude-sonnet-4-6">Claude 4.6 (Genial)</option>
+                </>
+              )}
             </select>
           </div>
 
@@ -140,72 +148,74 @@ export function Workspace() {
         </div>
       </nav>
 
-      {/* Área Principal con Transiciones */}
+      {/* Área Principal con Transiciones y Panel Siempre Activo */}
       <div className="flex-1 flex overflow-hidden relative">
-        <AnimatePresence mode="wait">
-          {viewMode === 'dashboard' ? (
-            <motion.div 
-              key="dashboard"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.02 }}
-              className="w-full h-full flex flex-col"
-            >
-              <Dashboard 
-                onCreateProject={() => {
-                  setActiveProjectPath('nuevo_proyecto');
-                  setActiveFilePath('main.py');
-                  setViewMode('editor');
-                }}
-                onProjectSelect={handleLaunchProject} 
-                projects={activeProjects} 
-              />
-            </motion.div>
-          ) : viewMode === 'preview' ? (
-            <motion.div 
-              key="preview"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="w-full h-full p-6 bg-[#0a0a0c]"
-            >
-               <PreviewPanel url="http://localhost:3000" onClose={() => setViewMode('editor')} />
-            </motion.div>
-          ) : (
-            <motion.div 
-              key="editor"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex-1 flex overflow-hidden w-full"
-            >
-              {/* Barra Lateral Izquierda - Explorador de Archivos */}
-              <div className={`w-72 shrink-0 glass-effect z-20 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-ml-72'}`}>
-                <FileExplorer 
-                  onFileSelect={(path) => {
-                    setActiveFilePath(path);
+        <div className="flex-1 flex overflow-hidden relative">
+          <AnimatePresence mode="wait">
+            {viewMode === 'dashboard' ? (
+              <motion.div 
+                key="dashboard"
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.02 }}
+                className="w-full h-full flex flex-col overflow-y-auto"
+              >
+                <Dashboard 
+                  onCreateProject={() => {
+                    setActiveProjectPath('nuevo_proyecto');
+                    setActiveFilePath('main.py');
+                    setViewMode('editor');
                   }}
-                  activeFile={activeFilePath}
+                  onProjectSelect={handleLaunchProject} 
+                  projects={activeProjects} 
                 />
-              </div>
-
-              {/* Panel Central - Editor y Terminal */}
-              <div className="flex-1 flex flex-col min-w-0 bg-[#0d0d0f]">
-                <div className="flex-1 relative">
-                  <CodeEditorPanel filePath={activeFilePath} />
+              </motion.div>
+            ) : viewMode === 'preview' ? (
+              <motion.div 
+                key="preview"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="w-full h-full p-6 bg-[#0a0a0c]"
+              >
+                 <PreviewPanel url="http://localhost:3000" onClose={() => setViewMode('editor')} />
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="editor"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex-1 flex overflow-hidden w-full"
+              >
+                {/* Barra Lateral Izquierda - Explorador de Archivos */}
+                <div className={`w-72 shrink-0 glass-effect z-20 transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-ml-72'}`}>
+                  <FileExplorer 
+                    onFileSelect={(path) => {
+                      setActiveFilePath(path);
+                    }}
+                    activeFile={activeFilePath}
+                  />
                 </div>
-                <div className="h-[280px] shrink-0 border-t border-border/50 glass-effect">
-                  <TerminalPanel className="h-full" />
-                </div>
-              </div>
 
-              {/* Barra Lateral Derecha - Chat */}
-              <div className="w-96 lg:w-[450px] shrink-0 hidden md:block border-l border-border/50 glass-effect">
-                <ChatPanel sessionId={activeSessionId} selectedModel={selectedModel} />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                {/* Panel Central - Editor y Terminal */}
+                <div className="flex-1 flex flex-col min-w-0 bg-[#0d0d0f]">
+                  <div className="flex-1 relative">
+                    <CodeEditorPanel filePath={activeFilePath} />
+                  </div>
+                  <div className="h-[280px] shrink-0 border-t border-border/50 glass-effect">
+                    <TerminalPanel className="h-full" />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Barra Lateral Derecha Fija (IA) SIEMPRE VISIBLE */}
+        <div className="w-96 lg:w-[450px] shrink-0 hidden md:flex flex-col border-l border-border/50 glass-effect relative z-40 bg-[#0d0d0f]/80 backdrop-blur-2xl">
+          <ChatPanel sessionId={activeSessionId} selectedModel={selectedModel} />
+        </div>
       </div>
     </div>
   );
