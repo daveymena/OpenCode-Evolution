@@ -43,7 +43,7 @@ const publicPath = path.resolve(__dirname, "../../opencode-ui/dist/public");
 app.use(express.static(publicPath));
 
 // Fallback to index.html for SPA routing
-app.get("*", (_req, res) => {
+app.use((_req, res) => {
   res.sendFile(path.join(publicPath, "index.html"));
 });
 
