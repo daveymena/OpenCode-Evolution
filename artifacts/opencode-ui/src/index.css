@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;900&family=Outfit:wght@300;400;500;600;700;900&display=swap');
 @import "tailwindcss";
 
+/* Tailwind v4: content detection fix for Windows */
+@source "./**/*.{ts,tsx,js,jsx}";
+@source "./components/**/*.{ts,tsx}";
+@source "./pages/**/*.{ts,tsx}";
+@source "./hooks/**/*.{ts,tsx}";
+
+
 /* ========================================
    OPENCODE OS - Custom CSS Variables
    ======================================== */
