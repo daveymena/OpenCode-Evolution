@@ -61,6 +61,17 @@ export function Workspace() {
     }
   };
 
+  const { data: filesData } = useListFiles({ path: "." });
+
+  // Escapar a una estructura compatible con el Dashboard
+  const activeProjects = filesData?.files?.map((file, idx) => ({
+    id: idx,
+    name: file.name,
+    path: file.path,
+    type: file.name.endsWith('.py') ? 'python' : file.name.endsWith('.ts') ? 'web' : 'folder',
+    updatedAt: new Date().toISOString(),
+  })) || [];
+
   return (
     <div className="flex flex-col h-screen w-full bg-background overflow-hidden selection:bg-primary/30 font-sans">
       
@@ -141,8 +152,13 @@ export function Workspace() {
               className="w-full h-full flex flex-col"
             >
               <Dashboard 
+                onCreateProject={() => {
+                  setActiveProjectPath('nuevo_proyecto');
+                  setActiveFilePath('main.py');
+                  setViewMode('editor');
+                }}
                 onProjectSelect={handleLaunchProject} 
-                projects={[]} // Aquí se pasarían los proyectos reales de la API
+                projects={activeProjects} 
               />
             </motion.div>
           ) : viewMode === 'preview' ? (

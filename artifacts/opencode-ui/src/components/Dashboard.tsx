@@ -12,10 +12,11 @@ interface Project {
 
 interface DashboardProps {
   onProjectSelect: (path: string) => void;
+  onCreateProject?: () => void;
   projects?: Project[];
 }
 
-export function Dashboard({ onProjectSelect, projects = [] }: DashboardProps) {
+export function Dashboard({ onProjectSelect, onCreateProject, projects = [] }: DashboardProps) {
   const [search, setSearch] = useState('');
 
   const filteredProjects = projects.filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
@@ -77,6 +78,7 @@ export function Dashboard({ onProjectSelect, projects = [] }: DashboardProps) {
           {/* Botón Nuevo Proyecto */}
           <motion.button 
             variants={item}
+            onClick={onCreateProject}
             whileHover={{ scale: 1.02, translateY: -5 }}
             className="group flex flex-col items-center justify-center gap-4 p-8 bg-primary/5 border-2 border-dashed border-primary/20 rounded-3xl hover:bg-primary/10 hover:border-primary/40 transition-all cursor-pointer h-[240px]"
           >
