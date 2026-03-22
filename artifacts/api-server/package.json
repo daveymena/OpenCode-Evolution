@@ -10,8 +10,17 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.63",
+    "@ai-sdk/cerebras": "^2.0.41",
+    "@ai-sdk/groq": "^3.0.31",
+    "@ai-sdk/mistral": "^3.0.27",
+    "@ai-sdk/openai": "^3.0.47",
+    "@ai-sdk/togetherai": "^2.0.41",
+    "@ai-sdk/xai": "^3.0.72",
+    "@openrouter/ai-sdk-provider": "^2.3.3",
     "@workspace/api-zod": "workspace:*",
     "@workspace/db": "workspace:*",
+    "ai": "^6.0.134",
     "cookie-parser": "^1.4.7",
     "cors": "^2",
     "drizzle-orm": "catalog:",

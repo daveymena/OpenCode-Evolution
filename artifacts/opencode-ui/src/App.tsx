@@ -16,10 +16,14 @@ const queryClient = new QueryClient({
 import { Login } from "@/pages/Login";
 
 function Router() {
+  const isAuthenticated = localStorage.getItem("opencode_auth_token") === "true";
+
   return (
     <Switch>
-      <Route path="/" component={Workspace} />
       <Route path="/login" component={Login} />
+      <Route path="/">
+        {isAuthenticated ? <Workspace /> : <Login />}
+      </Route>
       <Route component={NotFound} />
     </Switch>
   );

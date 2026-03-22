@@ -8,6 +8,8 @@ import integrationsRouter from "./integrations";
 import mcpRouter from "./mcp";
 import webhooksRouter from "./webhooks";
 
+import chatRouter from "./chat";
+
 const router: IRouter = Router();
 
 router.use("/health", healthRouter);
@@ -18,5 +20,6 @@ router.use("/projects", projectsRouter);
 router.use("/integrations", integrationsRouter);
 router.use("/mcp", mcpRouter);
 router.use("/webhooks", webhooksRouter);
+router.use("/chat", chatRouter);
 
 export default router;

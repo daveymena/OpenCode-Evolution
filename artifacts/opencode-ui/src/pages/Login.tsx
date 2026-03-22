@@ -9,8 +9,11 @@ export function Login() {
 
   const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate successful login/register for now
+    // Setting a fake authentication token for now so it simulates working with backend later
+    localStorage.setItem("opencode_auth_token", "true");
     setLocation("/");
+    // We force a quick reload so App.tsx re-evaluates `isAuthenticated` context without needing complex React Context right now
+    window.location.href = "/";
   };
 
   return (
