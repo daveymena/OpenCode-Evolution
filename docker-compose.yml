@@ -8,7 +8,6 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - OPENCODE_SERVER_PASSWORD=OpenCode_Evo_2026
     volumes:
       - opencode_data:/root/.local/share/opencode
     restart: unless-stopped

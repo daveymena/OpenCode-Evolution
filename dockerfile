@@ -14,18 +14,13 @@ RUN apt-get update && apt-get install -y \
 # Instalación NATIVA de OpenCode
 RUN npm install -g opencode-ai --force
 
-# Crear directorio de datos y asegurarse de que sea escribible
-RUN mkdir -p /root/.local/share/opencode && \
-    chown -R 1000:1000 /root/.local/share/opencode
-
 # Directorio de trabajo y persistencia
 WORKDIR /app
 ENV HOME=/root
-ENV OPENCODE_SERVER_PASSWORD=OpenCode_Evo_2026
 
 # Puerto estándar para EasyPanel
 EXPOSE 3000
 
-# Iniciar la Interfaz Web Original de OpenCode
+# Iniciar la Interfaz Web Original de OpenCode sin contraseña
 # --hostname 0.0.0.0 para que sea accesible desde afuera del contenedor
 CMD ["opencode", "web", "--hostname", "0.0.0.0", "--port", "3000"]
