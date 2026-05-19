@@ -14,6 +14,10 @@ RUN apt-get update && apt-get install -y \
 # Instalación NATIVA de OpenCode
 RUN npm install -g opencode-ai --force
 
+# Crear directorio de datos y asegurarse de que sea escribible
+RUN mkdir -p /root/.local/share/opencode && \
+    chown -R 1000:1000 /root/.local/share/opencode
+
 # Directorio de trabajo y persistencia
 WORKDIR /app
 ENV HOME=/root

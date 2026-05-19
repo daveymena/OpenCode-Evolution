@@ -8,28 +8,10 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - DATABASE_URL=${DATABASE_URL}
-    restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
-
-  db:
-    image: postgres:16-alpine
-    environment:
-      - POSTGRES_USER=${PGUSER:-opencode}
-      - POSTGRES_PASSWORD=${PGPASSWORD:-opencode}
-      - POSTGRES_DB=${PGDATABASE:-opencode_evolved}
+      - OPENCODE_SERVER_PASSWORD=OpenCode_Evo_2026
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${PGUSER:-opencode}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - opencode_data:/root/.local/share/opencode
     restart: unless-stopped
 
 volumes:
-  postgres_data:
+  opencode_data:

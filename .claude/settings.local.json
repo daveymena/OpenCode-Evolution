@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(du -sh artifacts/*/node_modules)",
+      "Bash(du -sh artifacts/*)",
+      "Bash(wsl --list --verbose)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}
