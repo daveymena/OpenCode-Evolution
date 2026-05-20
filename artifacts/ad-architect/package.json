@@ -1,0 +1,16 @@
+{
+  "name": "@workspace/ad-architect",
+  "version": "1.0.0",
+  "description": "Ad Architect - Generador automático de anuncios para productos",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "echo 'Ad Architect listo para producción'"
+  },
+  "dependencies": {
+    "express": "^5.0.0",
+    "cors": "^2.8.5"
+  },
+  "port": 4000
+}
