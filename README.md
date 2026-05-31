@@ -1,97 +1,40 @@
-# 🌌 OpenCode Evolved
+# 🌌 OpenCode Deploy
 
-Una plataforma revolucionaria de desarrollo impulsada por Inteligencia Artificial, diseñada como un **IDE Full-Stack** con capacidades de chat contextual profundo, ejecución de código en vivo y una interfaz premium de estado del arte (Dark Glassmorphism).
-
----
-
-## ✨ Características Principales
-
-- **🤖 IA Core (MCP Inteligente):** Integración nativa con múltiples proveedores de IA (Ollama, Antrophic, Groq) listos para leer, razonar y escribir código por ti.
-- **💻 Editor Integrado (Monaco):** La misma potencia subyacente que VS Code, operando directamente desde tu navegador con coloreado sintáctico, autocompletado y minimapa.
-- **🎨 UI/UX Premium:** Interfaz brutalmente diseñada con *Tailwind CSS* y *Framer Motion* que rinde homenaje a un entorno oscuro profundo, transiciones fluidas y componentes cristalinos.
-- **🗄️ Base de Datos Relacional:** Soporte robusto y escalable respaldado por **Supabase (PostgreSQL)** y manejado íntegramente de manera tipada a través de **Drizzle ORM**.
-- **💳 Pasarela de Pagos Global:** Listo para monetizar tu plataforma con integraciones transparentes usando la seguridad de **MercadoPago** y **PayPal**.
-- **🚀 Infraestructura Dockerizada:** Archivo Docker unificado listo para un despliegue de un solo clic, sin fricciones en plataformas como **EasyPanel**, Vercel o VPS puros.
+Configuración limpia y nativa de **OpenCode** para desarrollo local y despliegue rápido en **Easypanel** o servidores basados en Docker.
 
 ---
 
-## 🛠️ Stack Tecnológico (Monorepo)
+## 🚀 Despliegue en Easypanel
 
-**Frontend (`artifacts/opencode-evolved`)**
-- ⚛️ React 18 & Vite
-- 👗 Tailwind CSS & Radix UI
-- ✨ Framer Motion (Animaciones)
-- 📝 Monaco Editor (Escritura de código)
-- 🪝 TanStack Query (Estado asíncrono)
+OpenCode oficial corre como una interfaz web ligera y persistente:
 
-**Backend (`artifacts/api-server`)**
-- 🟢 Node.js v22 (ESM)
-- 🚂 Express / Fastify (Enrutamiento)
-- 🛡️ Zod (Validación estricta)
-- 🐘 Drizzle ORM & Supabase
+1. **Crear una App en Easypanel:**
+   - Selecciona **Docker Image** o conecta este repositorio de Git.
+   - Apunta al archivo `./dockerfile` para la compilación.
 
----
+2. **Puertos:**
+   - Expón el puerto contenedor `3000` al puerto externo de tu preferencia (ej. `80` o `443`).
 
-## 🚦 Guía de Despliegue (EasyPanel / Docker)
+3. **Volúmenes Persistentes:**
+   - Monta un volumen para persistir proyectos e historiales de conversación:
+     - **Nombre:** `opencode-data`
+     - **Punto de montaje:** `/root/.local/share/opencode`
 
-Este repositorio está preparado nativamente para despliegues instantáneos mediante Docker en entornos Linux.
-
-1. **Variables de Entorno (`.env`):**
-   Asegúrate de definir estas variables maestras en el panel de `Environment` de tu EasyPanel o VPS:
-   ```env
-   # Database
-   DATABASE_URL=postgresql://user:password@db.supabase.co:5432/postgres
-   
-   # IA APIs (Opcional si usas modelos locales)
-   GROQ_API_KEY=tu_llave
-   ANTHROPIC_API_KEY=tu_llave
-   
-   # Pagos
-   MERCADO_PAGO_PUBLIC_KEY=...
-   MERCADOPAGO_ACCESS_TOKEN=...
-   PAYPAL_CLIENT_ID=...
-   ```
-
-2. **Migración de la Base de Datos:**
-   La primera vez que enciendas la aplicación, las tablas deben inyectarse en la plataforma SQL:
-   ```bash
-   cd lib/db
-   pnpm run push-force
-   ```
-
-3. **Ejecución Docker:**
-   Simplemente construye y despliega:
-   ```bash
-   docker build -t opencode-evo .
-   docker run -p 3000:3000 --env-file .env opencode-evo
-   ```
+4. **Variables de Entorno:**
+   - Configura las claves de IA necesarias para el agente:
+     ```env
+     ANTHROPIC_API_KEY=tu_sk_key
+     OPENAI_API_KEY=tu_sk_key
+     ```
 
 ---
 
-## 🚀 Desarrollo Local
+## 💻 Ejecución Local con Docker
 
-Si deseas clonar el proyecto y modificarlo en tu propia máquina:
+Puedes levantar la instancia localmente con Docker Compose de manera inmediata:
 
-1. **Instalar Dependencias Globales:**
-   ```bash
-   npm install -g pnpm pm2
-   ```
+```bash
+docker-compose up -d --build
+```
 
-2. **Instalar Dependencias Monorepo:**
-   ```bash
-   pnpm install
-   ```
-
-3. **Ejecutar en Modo Desarrollo:**
-   Se levantarán los motores tanto del API (Backend) como de Vite (Frontend) simultáneamente:
-   ```bash
-   # En una terminal para el API:
-   pnpm --filter @workspace/api-server run dev
-   
-   # En otra terminal para el UI:
-   pnpm --filter @workspace/opencode-evolved run dev
-   ```
-
----
-
-*Desarrollado con Arquitectura Avanzada para escalar las ideas hacia el futuro de forma instantánea.*
+Esto compilará y levantará OpenCode expuesto en `http://localhost:3000` usando almacenamiento de volumen persistente.
