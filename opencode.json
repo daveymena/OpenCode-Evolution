@@ -5,7 +5,16 @@
       "npm": "@ai-sdk/openai-compatible",
       "name": "Kilo Gateway (Free)",
       "options": {
-        "baseURL": "https://api.kilo.ai/api/gateway"
+        "baseURL": "https://api.kilo.ai/api/gateway",
+        "headers": {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.90.0 Chrome/120.0.6099.291 Electron/28.2.8 Safari/537.36",
+          "Referer": "vscode-webview://kilo-extension",
+          "Origin": "vscode-webview://kilo-extension",
+          "Sec-Fetch-Dest": "empty",
+          "Sec-Fetch-Mode": "cors",
+          "Sec-Fetch-Site": "cross-site",
+          "x-kilo-client": "vscode"
+        }
       },
       "models": {
         "deepseek/deepseek-v4-flash:free": {
