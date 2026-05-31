@@ -19,6 +19,10 @@ RUN mkdir -p /workspace
 # Variables de entorno
 ENV HOME=/root
 
+# Configuración del Gateway Kilo (Modelos Free)
+RUN mkdir -p /root/.config/opencode
+COPY opencode.json /root/.config/opencode/opencode.json
+
 # Puerto estándar para EasyPanel
 EXPOSE 3000
 
