@@ -8,19 +8,20 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     wget \
-    chromium \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalación NATIVA de OpenCode
 RUN npm install -g opencode-ai --force
 
-# Directorio de trabajo y persistencia
-WORKDIR /app
+# Crear carpeta de trabajo para los proyectos del usuario
+RUN mkdir -p /workspace
+
+# Variables de entorno
 ENV HOME=/root
 
 # Puerto estándar para EasyPanel
 EXPOSE 3000
 
-# Iniciar la Interfaz Web Original de OpenCode sin contraseña
-# --hostname 0.0.0.0 para que sea accesible desde afuera del contenedor
+# Iniciar OpenCode apuntando al workspace como directorio de trabajo
+WORKDIR /workspace
 CMD ["opencode", "web", "--hostname", "0.0.0.0", "--port", "3000"]

@@ -10,7 +10,9 @@ services:
       - PORT=3000
     volumes:
       - opencode_data:/root/.local/share/opencode
+      - workspace_data:/workspace
     restart: unless-stopped
 
 volumes:
   opencode_data:
+  workspace_data:
