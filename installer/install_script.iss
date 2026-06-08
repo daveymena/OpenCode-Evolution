@@ -53,15 +53,16 @@ Source: "launch-local.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\icon.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\{#MyAppName} (Web Local)"; Filename: "{app}\launch-local.bat"; IconFilename: "{app}\icon.ico"; WorkingDir: "{app}"
-Name: "{group}\{#MyAppName} (EasyPanel Server)"; Filename: "{app}\launch-easypanel.bat"; IconFilename: "{app}\icon.ico"; WorkingDir: "{app}"
+Name: "{group}\{#MyAppName} (Web - EasyPanel SaaS)"; Filename: "{app}\launch-easypanel.bat"; IconFilename: "{app}\icon.ico"; WorkingDir: "{app}"
+Name: "{group}\{#MyAppName} (Local - Tu PC)"; Filename: "{app}\launch-local.bat"; IconFilename: "{app}\icon.ico"; WorkingDir: "{app}"
+Name: "{group}\{#MyAppName} - Guia Rapida"; Filename: "{commondesktop}\GUIA_OpenCode_Evolution.txt"; IconFilename: "{app}\icon.ico"
 Name: "{group}\Desinstalar {#MyAppName}"; Filename: "{uninstallexe}"; IconFilename: "{app}\icon.ico"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\launch-local.bat"; IconFilename: "{app}\icon.ico"; WorkingDir: "{app}"; Tasks: desktopicon
-Name: "{userstartup}\{#MyAppName}"; Filename: "{app}\launch-local.bat"; WorkingDir: "{app}"; Tasks: startup
+Name: "{commondesktop}\{#MyAppName} - EasyPanel"; Filename: "{app}\launch-easypanel.bat"; IconFilename: "{app}\icon.ico"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{commondesktop}\{#MyAppName} - Local"; Filename: "{app}\launch-local.bat"; IconFilename: "{app}\icon.ico"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy Bypass -File ""{app}\post-install.ps1"""; Flags: runhidden waituntilterminated; StatusMsg: "Instalando OpenCode CLI..."
-Filename: "{app}\launch-local.bat"; Description: "Abrir OpenCode Local"; Flags: postinstall nowait skipifsilent shellexec; Tasks: desktopicon
+Filename: "{app}\launch-easypanel.bat"; Description: "Abrir OpenCode EasyPanel (SaaS)"; Flags: postinstall nowait skipifsilent shellexec
 
 [UninstallRun]
 Filename: "cmd.exe"; Parameters: "/C npm uninstall -g opencode-ai"; Flags: runhidden waituntilterminated; RunOnceId: "UninstallOpenCodeCLI"

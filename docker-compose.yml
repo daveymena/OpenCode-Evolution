@@ -4,19 +4,27 @@ services:
   app:
     build: .
     ports:
+      - "80:80"
       - "3000:3000"
+      - "3001-3005:3001-3005"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV:-production}
       - PORT=3000
-      - DATABASE_URL=postgres://postgres:6715320@db:5432/davey?sslmode=disable
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=davey
-      - DB_USER=postgres
-      - DB_PASSWORD=6715320
+      - DATABASE_URL=${DATABASE_URL}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - OPENCODE_SERVER_USERNAME=${OPENCODE_SERVER_USERNAME:-opencode}
+      - OPENCODE_SERVER_PASSWORD=${OPENCODE_SERVER_PASSWORD:-opencode_evolution_2026}
+      - EASYPANEL_URL=${EASYPANEL_URL}
+      - INSTALLER_URL=${INSTALLER_URL}
     volumes:
-      - opencode_data:/root/.local/share/opencode
+      - opencode_data:/data
       - workspace_data:/workspace
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/users.conf:/etc/opencode/users.conf
     restart: unless-stopped
     depends_on:
       db:
@@ -28,16 +36,16 @@ services:
     image: postgres:16-alpine
     container_name: opencode-postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 6715320
-      POSTGRES_DB: davey
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-6715320}
+      POSTGRES_DB: ${DB_NAME:-davey}
     ports:
       - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -47,7 +55,7 @@ services:
 volumes:
   opencode_data:
   workspace_data:
-  postgres_data:
+  pgdata:
 
 networks:
   opencode-network:
