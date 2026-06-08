@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     wget \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalación NATIVA de OpenCode

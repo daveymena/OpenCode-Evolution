@@ -8,11 +8,47 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - DATABASE_URL=postgres://postgres:6715320@db:5432/davey?sslmode=disable
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=davey
+      - DB_USER=postgres
+      - DB_PASSWORD=6715320
     volumes:
       - opencode_data:/root/.local/share/opencode
       - workspace_data:/workspace
     restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - opencode-network
+
+  db:
+    image: postgres:16-alpine
+    container_name: opencode-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 6715320
+      POSTGRES_DB: davey
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - opencode-network
 
 volumes:
   opencode_data:
   workspace_data:
+  postgres_data:
+
+networks:
+  opencode-network:
+    driver: bridge
