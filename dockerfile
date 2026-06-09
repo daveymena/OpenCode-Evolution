@@ -77,7 +77,7 @@ RUN pip3 install --break-system-packages --no-cache-dir --timeout 120 \
     requests \
     psutil \
     python-nmap \
-    python-wakeonlan \
+    wakeonlan \
     paramiko \
     asyncssh \
     pywinrm && \
