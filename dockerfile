@@ -130,6 +130,9 @@ COPY scripts/entrypoint.sh /entrypoint.sh
 COPY scripts/users.conf /etc/opencode/users.conf
 RUN chmod +x /entrypoint.sh
 
+# Instrucciones del sistema (OpenCode las carga automaticamente)
+COPY .opencode/ /workspace/.opencode/
+
 # Scripts de control remoto
 COPY scripts/ /opt/scripts/
 RUN chmod +x /opt/scripts/*.sh 2>/dev/null || true
