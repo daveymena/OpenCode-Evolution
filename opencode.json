@@ -39,6 +39,140 @@
     }
   },
   "model": "kilo-free/deepseek/deepseek-v4-flash:free",
+  "agent": {
+    "pc-control": {
+      "name": "PC Control Remoto",
+      "description": "Control total de PC Windows y Linux: escritorio remoto, archivos, procesos, terminal",
+      "permission": {
+        "edit": "allow",
+        "bash": "allow"
+      },
+      "commands": {
+        "vnc-connect": {
+          "description": "Conectarse a un PC via VNC",
+          "command": "vncviewer -fullscreen ${HOST}::${PORT}"
+        },
+        "rdp-connect": {
+          "description": "Conectarse a un PC Windows via RDP",
+          "command": "xfreerdp /v:${HOST}:${PORT} /u:${USER} /p:${PASSWORD} /size:1920x1080 /dynamic-resolution"
+        },
+        "ssh-exec": {
+          "description": "Ejecutar comando remoto via SSH",
+          "command": "sshpass -p '${PASSWORD}' ssh -o StrictHostKeyChecking=no ${USER}@${HOST} -p ${PORT} '${COMMAND}'"
+        },
+        "vnc-start": {
+          "description": "Iniciar servidor VNC virtual en el contenedor",
+          "command": "Xvfb :99 -screen 0 1920x1080x24 +extension RANDR & fluxbox & x11vnc -display :99 -forever -nopw -shared -rfbport ${PORT:-5900}"
+        },
+        "winrm-exec": {
+          "description": "Ejecutar comando en Windows remoto via WinRM",
+          "command": "python3 -c \"import winrm; s=winrm.Session('${HOST}', auth=('${USER}','${PASSWORD}')); r=s.run_ps('${COMMAND}'); print(r.output.decode())\""
+        },
+        "screen-capture": {
+          "description": "Capturar pantalla del display virtual",
+          "command": "scrot -d 1 /workspace/screenshot.png && python3 -c \"from PIL import Image; Image.open('/workspace/screenshot.png').save('/workspace/screenshot.jpg', 'JPEG', quality=85)\""
+        },
+        "screen-ocr": {
+          "description": "Extraer texto de la pantalla via OCR",
+          "command": "tesseract /workspace/screenshot.png /workspace/ocr-output -l spa+eng 2>/dev/null && cat /workspace/ocr-output.txt"
+        },
+        "mouse-move": {
+          "description": "Mover el mouse en el display virtual",
+          "command": "xdotool mousemove ${X} ${Y}"
+        },
+        "mouse-click": {
+          "description": "Hacer click en posicion actual",
+          "command": "xdotool click ${BUTTON:-1}"
+        },
+        "key-type": {
+          "description": "Escribir texto via teclado virtual",
+          "command": "xdotool type '${TEXT}'"
+        },
+        "key-press": {
+          "description": "Presionar tecla especial",
+          "command": "xdotool key ${KEY}"
+        },
+        "wake-pc": {
+          "description": "Encender PC remoto via Wake-on-LAN",
+          "command": "python3 -c \"from wakeonlan import send_magic_packet; send_magic_packet('${MAC}')\""
+        },
+        "scan-network": {
+          "description": "Escanear equipos en la red local",
+          "command": "nmap -sn ${SUBNET:-192.168.1.0/24} -oN /workspace/network-scan.txt && cat /workspace/network-scan.txt"
+        }
+      }
+    },
+    "vision": {
+      "name": "Vision por Computadora",
+      "description": "Analisis de imagenes, deteccion de objetos, OCR, reconocimiento facial",
+      "commands": {
+        "analyze-image": {
+          "description": "Analizar imagen con OpenCV (detectar objetos, rostros, texto)",
+          "command": "python3 /opt/scripts/vision_analyze.py ${IMAGE_PATH}"
+        },
+        "ocr-image": {
+          "description": "Extraer texto de una imagen",
+          "command": "python3 -c \"import pytesseract; from PIL import Image; print(pytesseract.image_to_string(Image.open('${IMAGE_PATH}'), lang='spa+eng'))\""
+        },
+        "detect-objects": {
+          "description": "Detectar objetos en imagen",
+          "command": "python3 -c \"import cv2; img=cv2.imread('${IMAGE_PATH}'); print(f'Dimensiones: {img.shape}')\""
+        },
+        "template-match": {
+          "description": "Buscar patron en pantalla (template matching)",
+          "command": "python3 /opt/scripts/template_match.py ${SCREENSHOT} ${TEMPLATE}"
+        }
+      }
+    },
+    "browser-auto": {
+      "name": "Automation Navegador",
+      "description": "Control automatico de navegador web con Playwright",
+      "commands": {
+        "browser-open": {
+          "description": "Abrir pagina web en Chromium headless",
+          "command": "node /opt/scripts/browser_open.js ${URL}"
+        },
+        "browser-screenshot": {
+          "description": "Capturar pantalla del navegador",
+          "command": "node /opt/scripts/browser_screenshot.js ${URL} /workspace/browser-shot.png"
+        },
+        "browser-click": {
+          "description": "Hacer click en un elemento de la pagina",
+          "command": "node /opt/scripts/browser_click.js ${URL} ${SELECTOR}"
+        },
+        "browser-fill": {
+          "description": "Llenar un formulario en pagina web",
+          "command": "node /opt/scripts/browser_fill.js ${URL} ${SELECTOR} ${TEXT}"
+        },
+        "browser-extract": {
+          "description": "Extraer texto de una pagina web",
+          "command": "node /opt/scripts/browser_extract.js ${URL} ${SELECTOR}"
+        }
+      }
+    },
+    "file-ops": {
+      "name": "Operaciones de Archivos",
+      "description": "Gestion de archivos local y remota (SCP, SFTP, SMB)",
+      "commands": {
+        "scp-upload": {
+          "description": "Subir archivo via SCP",
+          "command": "sshpass -p '${PASSWORD}' scp -P ${PORT:-22} ${LOCAL_PATH} ${USER}@${HOST}:${REMOTE_PATH}"
+        },
+        "scp-download": {
+          "description": "Descargar archivo via SCP",
+          "command": "sshpass -p '${PASSWORD}' scp -P ${PORT:-22} ${USER}@${HOST}:${REMOTE_PATH} ${LOCAL_PATH}"
+        },
+        "smb-mount": {
+          "description": "Montar recurso compartido SMB de Windows",
+          "command": "mount -t cifs //${HOST}/${SHARE} /mnt/smb -o username=${USER},password=${PASSWORD}"
+        },
+        "rsync-sync": {
+          "description": "Sincronizar archivos via rsync sobre SSH",
+          "command": "sshpass -p '${PASSWORD}' rsync -avz -e 'ssh -p ${PORT:-22}' ${USER}@${HOST}:${REMOTE_PATH} ${LOCAL_PATH}"
+        }
+      }
+    }
+  },
   "permission": {
     "edit": "allow",
     "bash": "allow"

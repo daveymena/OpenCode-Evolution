@@ -5,8 +5,11 @@ services:
     build: .
     ports:
       - "80:80"
+      - "443:443"
       - "3000:3000"
       - "3001-3005:3001-3005"
+      - "5900-5905:5900-5905"
+      - "9222:9222"
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - PORT=3000
