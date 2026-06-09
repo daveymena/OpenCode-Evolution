@@ -54,30 +54,37 @@ RUN apt-get update && apt-get install -y \
 # ============================================
 # HERRAMIENTAS DE AUTOMATIZACION (Python)
 # ============================================
-RUN pip3 install --break-system-packages --no-cache-dir \
+# Capa 1: Vision y procesamiento de imagenes
+RUN pip3 install --break-system-packages --no-cache-dir --timeout 120 \
     opencv-python \
-    opencv-contrib-python \
     pytesseract \
-    pyautogui \
-    selenium \
     pillow \
     numpy \
-    mss \
+    mss && \
+    rm -rf /root/.cache/pip
+
+# Capa 2: Automatizacion GUI y control remoto
+RUN pip3 install --break-system-packages --no-cache-dir --timeout 120 \
+    pyautogui \
     pygetwindow \
     pyperclip \
-    keyboard \
-    mouse \
     vncdotool \
+    selenium && \
+    rm -rf /root/.cache/pip
+
+# Capa 3: Utilidades de red y sistema
+RUN pip3 install --break-system-packages --no-cache-dir --timeout 120 \
     requests \
     psutil \
     python-nmap \
     python-wakeonlan \
-    docker \
     paramiko \
     asyncssh \
-    pywinrm \
-    impacket \
-    pypsexec \
+    pywinrm && \
+    rm -rf /root/.cache/pip
+
+# Capa 4: Procesamiento de datos y web
+RUN pip3 install --break-system-packages --no-cache-dir --timeout 120 \
     python-pptx \
     openpyxl \
     beautifulsoup4 \
@@ -86,7 +93,8 @@ RUN pip3 install --break-system-packages --no-cache-dir \
     colorama \
     websockets \
     flask \
-    aiohttp
+    aiohttp && \
+    rm -rf /root/.cache/pip
 
 # ============================================
 # HERRAMIENTAS DE AUTOMATIZACION (Node.js / Navegador)
