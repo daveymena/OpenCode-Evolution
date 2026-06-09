@@ -85,13 +85,13 @@ grep -v '^#' "$CONFIG_FILE" | grep -v '^$' | while IFS='|' read -r USER PORT PAS
     OPENCODE_DATA_DIR="$DATA_DIR/.local/share/opencode" \
     OPENCODE_SERVER_USERNAME="$USER" \
     OPENCODE_SERVER_PASSWORD="$PASSWORD" \
-    opencode web --hostname "0.0.0.0" --port "$PORT" &
+    opencode web --hostname "0.0.0.0" --port "$PORT" --cors "*" &
 done
 
 # Instancia publica por defecto
 echo ""
 echo "  [+] Instancia publica en 0.0.0.0:3000"
-OPENCODE_APPNAME="opencode-default" opencode web --hostname "0.0.0.0" --port 3000 &
+OPENCODE_APPNAME="opencode-default" opencode web --hostname "0.0.0.0" --port 3000 --cors "*" &
 
 # ============================================
 # MOSTRAR RESUMEN
