@@ -67,8 +67,7 @@ RUN pip3 install --break-system-packages --no-cache-dir \
     pyperclip \
     keyboard \
     mouse \
-    python-vnc-client \
-    asyncio-vnc \
+    vncdotool \
     requests \
     psutil \
     python-nmap \

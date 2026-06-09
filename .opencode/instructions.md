@@ -16,6 +16,7 @@ puedes ejecutar secuencias completas para lograr objetivos complejos.
 - Servidor VNC en puerto `5900` (sin password, solo red local)
 - `vncviewer HOST::PUERTO` - conectarse a un PC remoto via VNC
 - `x11vnc -display :99 -forever -shared -rfbport 5900` - verificar servidor VNC local
+- `vncdotool` disponible para automatizacion VNC desde Python
 
 ### RDP - Windows Remoto
 - `xfreerdp /v:HOST:PUERTO /u:USUARIO /p:PASSWORD /size:1920x1080` - conectar a Windows
